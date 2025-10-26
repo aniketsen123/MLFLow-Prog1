@@ -52,18 +52,26 @@ class ModelTrainerConfig:
     _criterion = MIN_SAMPLES_SPLIT_CRITERION
     _random_state = MIN_SAMPLES_SPLIT_RANDOM_STATE
 
-@dataclass
-class ModelEvaluationConfig:
-    changed_threshold_score: float = MODEL_EVALUATION_CHANGED_THRESHOLD_SCORE
-    bucket_name: str = MODEL_BUCKET_NAME
-    s3_model_key_path: str = MODEL_FILE_NAME
+from dataclasses import dataclass
+from src.constants import MODEL_EVALUATION_CHANGED_THRESHOLD_SCORE
 
 @dataclass
+class ModelEvaluationConfig:
+    # Threshold for considering a new model as better
+    changed_threshold_score: float = MODEL_EVALUATION_CHANGED_THRESHOLD_SCORE
+    
+    # Local path for storing the best/production model
+    local_model_path: str = "artifact/production_model/best_model.pkl"
+
+
 class ModelPusherConfig:
-    bucket_name: str = MODEL_BUCKET_NAME
-    s3_model_key_path: str = MODEL_FILE_NAME
+    # Local path to production model
+    local_model_path: str = os.path.join("artifact", "production_model", "best_model.pkl")
 
 @dataclass
 class VehiclePredictorConfig:
-    model_file_path: str = MODEL_FILE_NAME
-    model_bucket_name: str = MODEL_BUCKET_NAME
+    """
+    Configuration for local model prediction.
+    """
+    # Path to the best local model
+    local_model_path: str = os.path.join("artifact", "production_model", "best_model.pkl")
